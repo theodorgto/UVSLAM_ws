@@ -1,0 +1,24 @@
+[1.099s] Invoking command in '/nvme_ros2_ws/src/mcap_merger': PYTHONPATH=/nvme_ros2_ws/src/mcap_merger/build/mcap_merger/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/nvme_ros2_ws/src/mcap_merger/install/mcap_merger/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/mcap_merger build --build-base /nvme_ros2_ws/src/mcap_merger/build/mcap_merger/build install --record /nvme_ros2_ws/src/mcap_merger/build/mcap_merger/install.log --single-version-externally-managed install_data
+[1.517s] running egg_info
+[1.518s] writing build/mcap_merger/mcap_merger.egg-info/PKG-INFO
+[1.519s] writing dependency_links to build/mcap_merger/mcap_merger.egg-info/dependency_links.txt
+[1.520s] writing entry points to build/mcap_merger/mcap_merger.egg-info/entry_points.txt
+[1.520s] writing requirements to build/mcap_merger/mcap_merger.egg-info/requires.txt
+[1.520s] writing top-level names to build/mcap_merger/mcap_merger.egg-info/top_level.txt
+[1.523s] reading manifest file 'build/mcap_merger/mcap_merger.egg-info/SOURCES.txt'
+[1.524s] writing manifest file 'build/mcap_merger/mcap_merger.egg-info/SOURCES.txt'
+[1.525s] running build
+[1.525s] running build_py
+[1.525s] copying mcap_merger/mcap_merger_node.py -> /nvme_ros2_ws/src/mcap_merger/build/mcap_merger/build/lib/mcap_merger
+[1.525s] running install
+[1.526s] running install_lib
+[1.528s] copying /nvme_ros2_ws/src/mcap_merger/build/mcap_merger/build/lib/mcap_merger/mcap_merger_node.py -> /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/lib/python3.10/site-packages/mcap_merger
+[1.529s] byte-compiling /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/lib/python3.10/site-packages/mcap_merger/mcap_merger_node.py to mcap_merger_node.cpython-310.pyc
+[1.530s] running install_data
+[1.531s] running install_egg_info
+[1.534s] removing '/nvme_ros2_ws/src/mcap_merger/install/mcap_merger/lib/python3.10/site-packages/mcap_merger-0.0.0-py3.10.egg-info' (and everything under it)
+[1.535s] Copying build/mcap_merger/mcap_merger.egg-info to /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/lib/python3.10/site-packages/mcap_merger-0.0.0-py3.10.egg-info
+[1.536s] running install_scripts
+[1.576s] Installing mcap_merger_node script to /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/lib/mcap_merger
+[1.577s] writing list of installed files to '/nvme_ros2_ws/src/mcap_merger/build/mcap_merger/install.log'
+[1.642s] Invoked command in '/nvme_ros2_ws/src/mcap_merger' returned '0': PYTHONPATH=/nvme_ros2_ws/src/mcap_merger/build/mcap_merger/prefix_override:/usr/lib/python3/dist-packages/colcon_core/task/python/colcon_distutils_commands:/nvme_ros2_ws/src/mcap_merger/install/mcap_merger/lib/python3.10/site-packages:${PYTHONPATH} /usr/bin/python3 -W ignore:setup.py install is deprecated -W ignore:easy_install command is deprecated setup.py egg_info --egg-base build/mcap_merger build --build-base /nvme_ros2_ws/src/mcap_merger/build/mcap_merger/build install --record /nvme_ros2_ws/src/mcap_merger/build/mcap_merger/install.log --single-version-externally-managed install_data

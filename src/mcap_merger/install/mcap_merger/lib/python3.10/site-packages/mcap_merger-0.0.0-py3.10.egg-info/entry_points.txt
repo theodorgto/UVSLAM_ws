@@ -1,0 +1,3 @@
+[console_scripts]
+mcap_merger_node = mcap_merger.mcap_merger_node:main
+

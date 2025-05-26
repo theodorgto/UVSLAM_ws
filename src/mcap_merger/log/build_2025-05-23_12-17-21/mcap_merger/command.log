@@ -1,0 +1,2 @@
+Invoking command in '/nvme_ros2_ws/src/mcap_merger/build/mcap_merger': /usr/bin/cmake /nvme_ros2_ws/src/mcap_merger -DCATKIN_INSTALL_INTO_PREFIX_ROOT=0 -DCMAKE_INSTALL_PREFIX=/nvme_ros2_ws/src/mcap_merger/install/mcap_merger
+Invoked command in '/nvme_ros2_ws/src/mcap_merger/build/mcap_merger' returned '1': /usr/bin/cmake /nvme_ros2_ws/src/mcap_merger -DCATKIN_INSTALL_INTO_PREFIX_ROOT=0 -DCMAKE_INSTALL_PREFIX=/nvme_ros2_ws/src/mcap_merger/install/mcap_merger

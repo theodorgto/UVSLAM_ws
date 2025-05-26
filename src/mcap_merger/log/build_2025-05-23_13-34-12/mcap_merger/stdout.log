@@ -1,0 +1,35 @@
+running egg_info
+creating build/mcap_merger/mcap_merger.egg-info
+writing build/mcap_merger/mcap_merger.egg-info/PKG-INFO
+writing dependency_links to build/mcap_merger/mcap_merger.egg-info/dependency_links.txt
+writing entry points to build/mcap_merger/mcap_merger.egg-info/entry_points.txt
+writing requirements to build/mcap_merger/mcap_merger.egg-info/requires.txt
+writing top-level names to build/mcap_merger/mcap_merger.egg-info/top_level.txt
+writing manifest file 'build/mcap_merger/mcap_merger.egg-info/SOURCES.txt'
+reading manifest file 'build/mcap_merger/mcap_merger.egg-info/SOURCES.txt'
+writing manifest file 'build/mcap_merger/mcap_merger.egg-info/SOURCES.txt'
+running build
+running build_py
+creating /nvme_ros2_ws/src/mcap_merger/build/mcap_merger/build
+creating /nvme_ros2_ws/src/mcap_merger/build/mcap_merger/build/lib
+creating /nvme_ros2_ws/src/mcap_merger/build/mcap_merger/build/lib/mcap_merger
+copying mcap_merger/mcap_merger_node.py -> /nvme_ros2_ws/src/mcap_merger/build/mcap_merger/build/lib/mcap_merger
+copying mcap_merger/__init__.py -> /nvme_ros2_ws/src/mcap_merger/build/mcap_merger/build/lib/mcap_merger
+running install
+running install_lib
+creating /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/lib/python3.10/site-packages/mcap_merger
+copying /nvme_ros2_ws/src/mcap_merger/build/mcap_merger/build/lib/mcap_merger/mcap_merger_node.py -> /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/lib/python3.10/site-packages/mcap_merger
+copying /nvme_ros2_ws/src/mcap_merger/build/mcap_merger/build/lib/mcap_merger/__init__.py -> /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/lib/python3.10/site-packages/mcap_merger
+byte-compiling /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/lib/python3.10/site-packages/mcap_merger/mcap_merger_node.py to mcap_merger_node.cpython-310.pyc
+byte-compiling /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/lib/python3.10/site-packages/mcap_merger/__init__.py to __init__.cpython-310.pyc
+running install_data
+creating /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/share/ament_index
+creating /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/share/ament_index/resource_index
+creating /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/share/ament_index/resource_index/packages
+copying resource/mcap_merger -> /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/share/ament_index/resource_index/packages
+copying package.xml -> /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/share/mcap_merger
+running install_egg_info
+Copying build/mcap_merger/mcap_merger.egg-info to /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/lib/python3.10/site-packages/mcap_merger-0.0.0-py3.10.egg-info
+running install_scripts
+Installing mcap_merger_node script to /nvme_ros2_ws/src/mcap_merger/install/mcap_merger/lib/mcap_merger
+writing list of installed files to '/nvme_ros2_ws/src/mcap_merger/build/mcap_merger/install.log'

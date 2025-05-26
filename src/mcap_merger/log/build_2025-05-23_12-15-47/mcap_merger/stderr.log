@@ -1,0 +1,8 @@
+[31mCMake Error at /opt/ros/humble/share/ament_cmake_python/cmake/ament_python_install_package.cmake:46 (message):
+  ament_python_install_package() called with unused arguments:
+  /nvme_ros2_ws/src/mcap_merger/mcap_merger
+Call Stack (most recent call first):
+  /opt/ros/humble/share/ament_cmake_python/cmake/ament_python_install_package.cmake:39 (_ament_cmake_python_install_package)
+  CMakeLists.txt:6 (ament_python_install_package)
+
+[0m
