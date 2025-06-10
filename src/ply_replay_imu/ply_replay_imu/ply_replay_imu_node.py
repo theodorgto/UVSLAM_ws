@@ -14,14 +14,16 @@ import struct
 def o3d_to_pointcloud2(pcd: o3d.geometry.PointCloud,
                        stamp: Time,
                        frame_id: str = "os_sensor") -> PointCloud2:
-    points = np.asarray(pcd.points)
+    points = np.asarray(pcd.points) * 10 # convert to cm
     colors = np.asarray(pcd.colors)
     has_color = (colors.shape[0] == points.shape[0])
 
+
+
     fields = [
         PointField(name='x', offset=0,  datatype=PointField.FLOAT32, count=1),
-        PointField(name='y', offset=4,  datatype=PointField.FLOAT32, count=1),
-        PointField(name='z', offset=8,  datatype=PointField.FLOAT32, count=1),
+        PointField(name='z', offset=4,  datatype=PointField.FLOAT32, count=1),
+        PointField(name='y', offset=8,  datatype=PointField.FLOAT32, count=1),
     ]
     point_step = 12
     if has_color:
@@ -50,6 +52,19 @@ def o3d_to_pointcloud2(pcd: o3d.geometry.PointCloud,
     msg.data = bytes(buf)
     return msg
 
+def crop_box(pcd, xmin, xmax, ymin, ymax, zmin, zmax):
+    """
+    Keep only points within the axis-aligned box [xmin,xmax]×[ymin,ymax]×[zmin,zmax].
+    """
+
+    pts = np.asarray(pcd.points)
+    mask = (
+        (pts[:, 0] >= xmin) & (pts[:, 0] <= xmax) &
+        (pts[:, 1] >= ymin) & (pts[:, 1] <= ymax) &
+        (pts[:, 2] >= zmin) & (pts[:, 2] <= zmax)
+    )
+    indices = np.where(mask)[0]
+    return pcd.select_by_index(indices)
 
 class SensorPublisher(Node):
     def __init__(self, pc_csv, pcd_dir, imu_csv, downsample_pc=1.0 ,imu_frame_id="imu_link"):
@@ -111,9 +126,33 @@ class SensorPublisher(Node):
                 imu.linear_acceleration.y = float(row[9])
                 imu.linear_acceleration.z = float(row[10])
 
+                
+
                 self.imu_msgs.append((ts_ns, imu))
+
         self.imu_msgs.sort(key=lambda x: x[0])
+
+
+        # ---------------------------------------------------
+        # Compute mean bias on linear accel X & Y, then remove
+        # ---------------------------------------------------
+        # extract all x,y accel values
+        # lax_vals = [msg.linear_acceleration.x for _, msg in self.imu_msgs]
+        # lay_vals = [msg.linear_acceleration.y for _, msg in self.imu_msgs]
+
+        # # compute mean bias
+        # bias_x = sum(lax_vals) / len(lax_vals)
+        # bias_y = sum(lay_vals) / len(lay_vals)
+        # self.get_logger().info(f"Computed accel bias: x={bias_x:.6f}, y={bias_y:.6f}")
+
+        # # subtract bias from each message
+        # for _, msg in self.imu_msgs:
+        #     msg.linear_acceleration.x -= bias_x
+        #     msg.linear_acceleration.y -= bias_y
+
         self.imu_idx = 0
+
+
 
         # Timer at 1 ms resolution
         self.timer = self.create_timer(0.001, self.on_timer)
@@ -139,8 +178,23 @@ class SensorPublisher(Node):
         if now >= next_pc_ts and next_pc_ts <= next_imu_ts:
             ts_ns, plyfile = self.pc_frames[self.pc_idx]
             pcd = o3d.io.read_point_cloud(plyfile)
+
+            # ### filter background points
+            # distance_threshold = 1.3
+            # pcd = pcd.select_by_index(np.where(np.asarray(pcd.points)[:, 2] < distance_threshold)[0])
+            # self.get_logger().info(f"Filtered PCD: {len(pcd.points)} points within distance < {distance_threshold} ")
+
+            # ### crop to box
+            XMIN, XMAX = -0.4, 0.6
+            YMIN, YMAX = -1.0, 1.0
+            ZMIN, ZMAX = -0.3, 1.3
+
+            pcd = crop_box(pcd, XMIN, XMAX, YMIN, YMAX, ZMIN, ZMAX)
+            self.get_logger().info(f"Cropped PCD: {len(pcd.points)} points within box ")
+
             stamp = Time(sec=ts_ns // 10**9, nanosec=ts_ns % 10**9)
             msg = o3d_to_pointcloud2(pcd, stamp)
+
             self.pc_pub.publish(msg)
             self.get_logger().info(f"PCD #{self.pc_idx} @ {ts_ns} ns → {plyfile}")
             self.pc_idx += 1
@@ -184,4 +238,5 @@ def main():
 
 
 if __name__ == '__main__':
+    self.get_logger().info("Starting ply_replay_imu_node")
     main()
