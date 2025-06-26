@@ -54,7 +54,7 @@ def o3d_to_pointcloud2(pcd: o3d.geometry.PointCloud,
 
 def crop_box(pcd, xmin, xmax, ymin, ymax, zmin, zmax):
     """
-    Keep only points within the axis-aligned box [xmin,xmax]×[ymin,ymax]×[zmin,zmax].
+    Keep only points within the axis-aligned box [xmin,xmax]x[ymin,ymax]x[zmin,zmax].
     """
 
     pts = np.asarray(pcd.points)
@@ -66,15 +66,29 @@ def crop_box(pcd, xmin, xmax, ymin, ymax, zmin, zmax):
     indices = np.where(mask)[0]
     return pcd.select_by_index(indices)
 
+def segment_plane(pcd, distance_threshold=0.08, ransac_n=3, num_iterations=3000):
+    """
+    Run RANSAC plane segmentation on the point cloud `pcd`.
+    Returns: (plane_model, inlier_indices)
+    """
+    plane_model, inliers = pcd.segment_plane(
+        distance_threshold=distance_threshold,
+        ransac_n=ransac_n,
+        num_iterations=num_iterations
+    )
+    return plane_model, inliers
+
 class SensorPublisher(Node):
     def __init__(self, pc_csv, pcd_dir, imu_csv, downsample_pc=1.0 ,imu_frame_id="imu_link"):
         super().__init__('sensor_publisher')
 
+        queue_size_pcl = 10
+
         # Publishers
         self.pc_pub = self.create_publisher(PointCloud2,
-                                            '/os_cloud_node/points', 10)
+                                            '/os_cloud_node/points', queue_size_pcl)
         self.imu_pub = self.create_publisher(Imu,
-                                             '/os_cloud_node/imu', 50)
+                                             '/os_cloud_node/imu', queue_size_pcl*10)
 
         # Load point-cloud schedule
         self.pc_frames = []  # list of (ts_ns, ply_path)
@@ -176,27 +190,36 @@ class SensorPublisher(Node):
 
         # Publish whichever is next and whose timestamp has passed
         if now >= next_pc_ts and next_pc_ts <= next_imu_ts:
+
             ts_ns, plyfile = self.pc_frames[self.pc_idx]
             pcd = o3d.io.read_point_cloud(plyfile)
+
+            ### downsample pointcloud
+            pcd = pcd.uniform_down_sample(every_k_points=5)
+            # pcd = pcd.radius_outlier_removal(nb_points=15, radius=0.03)
 
             # ### filter background points
             # distance_threshold = 1.3
             # pcd = pcd.select_by_index(np.where(np.asarray(pcd.points)[:, 2] < distance_threshold)[0])
             # self.get_logger().info(f"Filtered PCD: {len(pcd.points)} points within distance < {distance_threshold} ")
 
-            # ### crop to box
-            XMIN, XMAX = -0.4, 0.6
-            YMIN, YMAX = -1.0, 1.0
-            ZMIN, ZMAX = -0.3, 1.3
+            ### crop to box
+            # XMIN, XMAX = -0.4, 0.6
+            # YMIN, YMAX = -1.0, 1.0
+            # ZMIN, ZMAX = -0.3, 1.3
 
-            pcd = crop_box(pcd, XMIN, XMAX, YMIN, YMAX, ZMIN, ZMAX)
-            self.get_logger().info(f"Cropped PCD: {len(pcd.points)} points within box ")
+            # pcd = crop_box(pcd, XMIN, XMAX, YMIN, YMAX, ZMIN, ZMAX)
+            # self.get_logger().info(f"Cropped PCD: {len(pcd.points)} points within box ")
+
+            # # remove plane
+            # plane_model_t, inliers_t = segment_plane(pcd)
+            # pcd = pcd.select_by_index(inliers_t, invert=True)
 
             stamp = Time(sec=ts_ns // 10**9, nanosec=ts_ns % 10**9)
             msg = o3d_to_pointcloud2(pcd, stamp)
 
             self.pc_pub.publish(msg)
-            self.get_logger().info(f"PCD #{self.pc_idx} @ {ts_ns} ns → {plyfile}")
+            self.get_logger().info(f"PCD #{self.pc_idx} @ {ts_ns} ns → {plyfile} with {len(pcd.points)} points")
             self.pc_idx += 1
 
         elif now >= next_imu_ts:
